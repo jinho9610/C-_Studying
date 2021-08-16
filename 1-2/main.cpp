@@ -7,7 +7,7 @@ using namespace header2;
 
 int main()
 {
-    header1::h1_print(); // using namespace header1ÀÌ ¾øÀ¸¹Ç·Î header1:: ¾øÀÌ´Â ºÒ°¡
+    header1::h1_print(); // using namespace header1ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ header1:: ï¿½ï¿½ï¿½Ì´ï¿½ ï¿½Ò°ï¿½
     h2_print();
 
     return 0;
