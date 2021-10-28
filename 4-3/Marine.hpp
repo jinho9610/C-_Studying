@@ -6,6 +6,8 @@
 using namespace std;
 
 class Marine {
+    static int total_marine_num;
+
    private:
     int hp;
     int coord_x, coord_y;
@@ -22,6 +24,7 @@ class Marine {
     int attack();
     void be_attacked(int damage_earn);
     void move(int x, int y);
+    static void show_total_marine();
 
     void show_status();
 };

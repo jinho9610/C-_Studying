@@ -2,9 +2,9 @@
 
 int main() {
     Marine marine1(2, 3, "Jason");
-    Marine marine2(3, 5, "Sean");
-
     marine1.show_status();
+
+    Marine marine2(3, 5, "Sean");
     marine2.show_status();
 
     cout << endl
