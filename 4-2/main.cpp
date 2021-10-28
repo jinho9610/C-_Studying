@@ -6,8 +6,8 @@ int main()
     day.SetDate(2021, 3, 1);
     day.ShowDate();
 
-    day.AddDay(30);
+    day.AddDay(33);
     day.ShowDate();
-    
+
     return 0;
 }

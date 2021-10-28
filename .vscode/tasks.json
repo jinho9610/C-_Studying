@@ -74,6 +74,16 @@
                 "/C",
                 "${fileDirname}\\${fileBasenameNoExtension}"
             ]
+        },
+        // make
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "mingw32-make",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
