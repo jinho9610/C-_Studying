@@ -1,5 +1,12 @@
 #include "MyString.hpp"
 
+MyString::MyString(int capacity) {
+    string_content = new char[capacity];
+    string_length = 0;
+    memory_capacity = capacity;
+    cout << "capacity만 " << capacity << "만큼 확보하고 content는 없음" << endl;
+}
+
 MyString::MyString(char c) {
     string_content = new char[1];
     string_content[0] = c;
@@ -7,6 +14,7 @@ MyString::MyString(char c) {
 }
 
 MyString::MyString(const char* str) {
+    cout << "const char*를 인자로 갖는 생성자 호출" << endl;
     string_length = strlen(str);
     string_content = new char[string_length];
     memory_capacity = strlen(str);
@@ -96,4 +104,8 @@ char MyString::at(int idx) const {
 
     else
         return string_content[idx];
+}
+
+void MyString::change() const {
+    mut = 3;
 }
