@@ -28,6 +28,8 @@ class MyString {
     MyString& assign(const char*);
 
     void reserve(int);
+
+    char at(int) const;
 };
 
 #endif

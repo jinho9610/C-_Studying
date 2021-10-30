@@ -89,3 +89,11 @@ void MyString::reserve(int size) {
         delete[] prev_string_content;
     }
 }
+
+char MyString::at(int idx) const {
+    if (idx < 0 || idx >= string_length)
+        return NULL;
+
+    else
+        return string_content[idx];
+}
