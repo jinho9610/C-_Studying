@@ -19,8 +19,10 @@ MyComplex MyComplex::operator*(const MyComplex& c) const {
 }
 
 MyComplex MyComplex::operator/(const MyComplex& c) const {
-    if (c.real == 0 && c.img == 0)
+    if (c.real == 0 && c.img == 0) {
         cout << "0 divide error!" << endl;
+        return *this;
+    }
 
     return MyComplex(
         (real * c.real + img * c.img) / (c.real * c.real + c.img * c.img),
