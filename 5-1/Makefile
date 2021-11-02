@@ -12,4 +12,4 @@ main : MyComplex.o main.o
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) main
+	rm -f $(OBJS)

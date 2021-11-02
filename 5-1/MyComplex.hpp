@@ -16,6 +16,7 @@ class MyComplex {
     MyComplex operator-(const MyComplex& c) const;
     MyComplex operator*(const MyComplex& c) const;
     MyComplex operator/(const MyComplex& c) const;
+    MyComplex& operator=(const MyComplex& c);
 
     void println();
 };

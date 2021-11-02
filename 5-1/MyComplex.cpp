@@ -29,6 +29,12 @@ MyComplex MyComplex::operator/(const MyComplex& c) const {
         (img * c.real - real * c.img) / (c.real * c.real + c.img * c.img));
 }
 
+MyComplex& MyComplex::operator=(const MyComplex& c) {
+    real = c.real;
+    img = c.img;
+    return *this;
+}
+
 void MyComplex::println() {
     cout << real;
     if (img < 0) {
