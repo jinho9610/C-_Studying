@@ -1,6 +1,6 @@
 CC = g++
 CXXFLAGS = -Wall -O2
-OBJS = Employee.hpp.gch EmployeeList.hpp.gch main.o
+OBJS = Employee.hpp.gch EmployeeList.hpp.gch Manager.hpp.gch main.o
 
 main.o : main.cpp
 

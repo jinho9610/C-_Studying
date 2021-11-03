@@ -7,30 +7,22 @@
 
 using namespace std;
 
-class Manager {
+class Manager : public Employee {
    private:
-    string name;  // 이름
-    int age;      // 나이
-
-    string position;      // 직책
-    int rank;             // 직급
     int year_of_service;  // 근속 연수
 
    public:
     Manager(string name, int age, string position, int rank, int year_of_service)
-        : name(name), age(age), position(position), rank(rank), year_of_service(year_of_service) {}  // 초기화 리스트 사용한느 생성자
+        : Employee(name, age, position, rank), year_of_service(year_of_service) {}  // 초기화 리스트 사용한느 생성자
 
-    Manager(const Manager& manager) {
-        name = manager.name;
-        age = manager.age;
-        position = manager.position;
-        rank = manager.rank;
+    Manager(const Manager& manager)
+        : Employee(manager.name, manager.age, manager.position, manager.rank) {
         year_of_service = manager.year_of_service;
     }
 
     void print_info() {
         cout << name << " (" << position << ", " << age << ", " << year_of_service
-             << "년차) -->" << calculate_pay() << "$" << endl;
+             << "년차) --> " << calculate_pay() << "$" << endl;
     }
 
     int calculate_pay() const {

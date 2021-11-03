@@ -8,7 +8,7 @@
 using namespace std;
 
 class Employee {
-   private:
+   protected:
     string name;  // 이름
     int age;      // 나이
 
@@ -28,7 +28,7 @@ class Employee {
     Employee() {}  // default
 
     void print_info() {
-        cout << name << " (" << position << ", " << age << ") -->" << calculate_pay() << "$" << endl;
+        cout << name << " (" << position << ", " << age << ") --> " << calculate_pay() << "$" << endl;
     }
 
     int calculate_pay() const {

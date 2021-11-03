@@ -44,13 +44,15 @@ class EmployeeList {
     void print_employee_info() {
         int total_pay = 0;
         for (int i = 0; i < current_employee; ++i) {
+            employee_list[i]->print_info();
             total_pay += employee_list[i]->calculate_pay();
         }
         for (int i = 0; i < current_manager; ++i) {
+            manager_list[i]->print_info();
             total_pay += manager_list[i]->calculate_pay();
         }
 
-        cout << "총 인건비 : " << total_pay << endl;
+        cout << "총 인건비 : " << total_pay << "$" << endl;
     }
 };
 
