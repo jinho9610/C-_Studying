@@ -20,12 +20,12 @@ class Manager : public Employee {
         year_of_service = manager.year_of_service;
     }
 
-    void print_info() {
+    void print_info() override {
         cout << name << " (" << position << ", " << age << ", " << year_of_service
              << "년차) --> " << calculate_pay() << "$" << endl;
     }
 
-    int calculate_pay() const {
+    int calculate_pay() const override {
         return 200 + rank * 50 + 5 * year_of_service;
     }
 };

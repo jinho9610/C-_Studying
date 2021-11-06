@@ -27,11 +27,11 @@ class Employee {
 
     Employee() {}  // default
 
-    void print_info() {
+    virtual void print_info() {
         cout << name << " (" << position << ", " << age << ") --> " << calculate_pay() << "$" << endl;
     }
 
-    int calculate_pay() const {
+    virtual int calculate_pay() const {
         return 200 + rank * 50;
     }
 };
