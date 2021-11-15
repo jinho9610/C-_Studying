@@ -1,34 +1,40 @@
+#include <cstdio>
 #include <iostream>
 #include <thread>
+#include <vector>
 
 using namespace std;
 
-void func1() {
-    for (int i = 0; i < 100; i++) {
-        cout << "thread1 작동중!" << endl;
+void worker(vector<int>::iterator start, vector<int>::iterator end, int* result) {
+    int sum = 0;
+    for (auto it = start; it < end; ++it) {
+        sum += *it;
     }
-}
+    *result = sum;
 
-void func2() {
-    for (int i = 0; i < 100; i++) {
-        cout << "thread2 작동중!" << endl;
-    }
-}
-
-void func3() {
-    for (int i = 0; i < 100; i++) {
-        cout << "thread3 작동중!" << endl;
-    }
+    cout << "쓰레드 ID: " << this_thread::get_id() << " --> "
+         << *start << " ~ " << *end << "까지 합 계산: "
+         << *result << endl;
 }
 
 int main() {
-    thread t1(func1);
-    thread t2(func2);
-    thread t3(func3);
+    vector<int> data(10000);
+    for (int i = 0; i < 10000; i++) {
+        data[i] = i;
+    }
 
-    t1.join();
-    t2.join();
-    t3.join();
+    vector<int> partial_sums(4);  // 2500개 씩 부분 합을 구하여 저장함
+
+    vector<thread> workers;
+    for (int i = 0; i < 4; i++) {
+        workers.push_back(
+            thread(worker, data.begin() + i * 2500, data.begin() + (i + 1) * 2500,
+                   &partial_sums[i]));
+    }
+
+    for (int i = 0; i < 4; i++) {
+        workers[i].join();
+    }
 
     return 0;
 }
