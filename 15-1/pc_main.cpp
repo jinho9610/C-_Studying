@@ -1,4 +1,5 @@
 #include <chrono>
+#include <condition_variable>
 #include <iostream>
 #include <mutex>
 #include <queue>
@@ -8,7 +9,7 @@
 
 using namespace std;
 
-void producer(queue<string>* download_pages, mutex* m, int index) {
+void producer(queue<string>* download_pages, mutex* m, int index, condition_variable* cv) {
     for (int i = 0; i < 5; i++) {
         // 웹페이지를 다운로드하는 시간을 가정하고 sleep
         this_thread::sleep_for(chrono::milliseconds(100 * index));
@@ -20,29 +21,36 @@ void producer(queue<string>* download_pages, mutex* m, int index) {
         m->lock();
         download_pages->push(content);
         m->unlock();
+
+        // 처리할 contents를 막 q에 push했으니, consumer에게 할 일이 있음을 알려줌
+        cv->notify_one();
     }
 }
 
-void consumer(queue<string>* download_pages, mutex* m, int* num_processed) {
-    while (*num_processed < 25) {  // q에서 pop하고 출력한 page가 25개가 될 때 까지
-        m->lock();
+void consumer(queue<string>* download_pages, mutex* m, int* num_processed, condition_variable* cv) {
+    while (*num_processed < 25) {   // q에서 pop하고 출력한 page가 25개가 될 때 까지
+        unique_lock<mutex> lk(*m);  // mutex를 감싼 unique lock 생성
         // q에 다운로드된 콘텐츠가 없다면 lock을 해제함
         // 그래야 provider에서 q에 콘텐츠 push 가능
-        if (download_pages->empty()) {
-            m->unlock();
-            // 아무런 contents 없다면 10ms 대기하며 provider가 q에
-            // 콘텐츠 push 하기를 대기
-            this_thread::sleep_for(chrono::milliseconds(10));
-            // 무의미한 empty() 함수 호출 및 확인 과정을 "그나마" 방지하기 위해 10ms 대기함
-            // condition value를 활용하면, 처리할 콘테츠가 있을 때만 스레드가 깨어나게 할 수 있음
-            continue;
+
+        cv->wait(
+            lk, [&] {
+                // q가 비어있지 않거나, 처리한 contents 개수가 25개가 되면
+                // wake up!
+                return !download_pages->empty() || *num_processed == 25;
+            });
+
+        // *num_processed == 25 조건에 의해서 wake up된 경우
+        if (*num_processed == 25) {
+            lk.unlock();
+            return;
         }
 
         string content = download_pages->front();
         download_pages->pop();
 
         ++(*num_processed);
-        m->unlock();
+        lk.unlock();
 
         cout << content;
         this_thread::sleep_for(chrono::milliseconds(80));
@@ -52,23 +60,26 @@ void consumer(queue<string>* download_pages, mutex* m, int* num_processed) {
 int main() {
     queue<string> download_pages;
     mutex m;
+    condition_variable cv;
 
     vector<thread> producers, consumers;
 
     for (int i = 0; i < 5; i++) {
         producers.push_back(
-            thread(producer, &download_pages, &m, i + 1));
+            thread(producer, &download_pages, &m, i + 1, &cv));
     }
 
     int num_processed = 0;
     for (int i = 0; i < 3; i++) {
         consumers.push_back(
-            thread(consumer, &download_pages, &m, &num_processed));
+            thread(consumer, &download_pages, &m, &num_processed, &cv));
     }
 
     for (int i = 0; i < 5; i++) {
         producers[i].join();
     }
+
+    cv.notify_all();
 
     for (int i = 0; i < 3; i++) {
         consumers[i].join();
